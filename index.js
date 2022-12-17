@@ -8,10 +8,13 @@ const app = express();
 
 // Public directory
 app.use(express.static("public"));
-app.use("/api/auth", require("./routes/auth"));
+
+// Body parser
+app.use(express.json());
 
 // Routes
-// TODO: auth // create, login, renew
+app.use("/api/auth", require("./routes/auth"));
+
 // TODO: CRUD: events
 
 // Listen requests
