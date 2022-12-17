@@ -8,11 +8,11 @@ const app = express();
 
 // Public directory
 app.use(express.static("public"));
+app.use("/api/auth", require("./routes/auth"));
 
 // Routes
-// app.get("/", (req, res) => {
-
-// });
+// TODO: auth // create, login, renew
+// TODO: CRUD: events
 
 // Listen requests
 app.listen(process.env.PORT, () => {
