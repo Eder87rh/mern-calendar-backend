@@ -1,18 +1,22 @@
 const { response } = require("express");
+const { validationResult } = require("express-validator");
 
 const createUser = (req, res = response /* to get the intellisence */) => {
   console.log(req.body);
 
   const { name, email, password } = req.body;
 
-  if (name.length < 5) {
+  const errors = validationResult(req);
+  // console.log("🚀 ~ file: auth.js:10 ~ createUser ~ errors", errors);
+
+  if (!errors.isEmpty()) {
     return res.status(400).json({
       ok: false,
-      msg: "Name must have at least 5 characters",
+      errors: errors.mapped(),
     });
   }
 
-  res.json({
+  res.status(201).json({
     ok: true,
     msg: "register",
     name,
@@ -23,6 +27,15 @@ const createUser = (req, res = response /* to get the intellisence */) => {
 
 const loginUser = (req, res = response) => {
   const { email, password } = req.body;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      ok: false,
+      errors: errors.mapped(),
+    });
+  }
+
   res.json({
     ok: true,
     msg: "login",
