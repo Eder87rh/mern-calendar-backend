@@ -5,16 +5,27 @@ const createUser = async (
   req,
   res = response /* to get the intellisence */
 ) => {
-  // const { name, email, password } = req.body;
+  const { email, password } = req.body;
 
   try {
-    const user = new User(req.body);
+    let user = await User.findOne({ email });
+    console.log("🚀 ~ file: auth.js:13 ~ user", user);
+
+    if (user) {
+      return res.status(400).json({
+        ok: false,
+        msg: "The user email already exists",
+      });
+    }
+
+    user = new User(req.body);
 
     await user.save();
 
     res.status(201).json({
       ok: true,
-      msg: "register",
+      uid: user.id,
+      name: user.name,
     });
   } catch (error) {
     res.status(500).json({
